@@ -5,10 +5,12 @@ THEMES = {"0": {"name": "Default", 0: "", 2: "2", 4: "4", 8: "8", 16: "16", 32: 
 
 
 def grid_get_value(grid,i,j):
+    """Retourne la valeur contenue dans la case i,j de la grille."""
     return grid[i][j]
 
 
 def create_grid(n):
+    """Créé une grille de taille n."""
     game_grid = []
     for i in range(0,n):
         game_grid.append([0]*n)
@@ -16,6 +18,7 @@ def create_grid(n):
 
 
 def get_value_new_tile():
+    """Génère la valeur de la prochaine case à ajouter à la grille."""
     n = rd.randint(1,10)
     if n >= 2 :
         return 2
@@ -24,6 +27,7 @@ def get_value_new_tile():
 
 
 def get_all_tiles(grid):
+    """Retourne la liste de toutes les valeurs contenues dans la grille."""
     tiles = []
 
     for ligne in grid :
@@ -36,6 +40,7 @@ def get_all_tiles(grid):
 
 
 def get_empty_tiles_positions(grid):
+    """Retourne la liste des positions des cases vides de la grille."""
     n = len(grid)
     empty_tiles = []
     for i in range(n):
@@ -46,6 +51,7 @@ def get_empty_tiles_positions(grid):
 
 
 def get_new_position(grid):
+    """Choisi aléatoirement une case vide dan la grille."""
     empty_tiles = get_empty_tiles_positions(grid)
     a, b = rd.choice(empty_tiles)
     grid[a][b] = 0
@@ -53,6 +59,7 @@ def get_new_position(grid):
 
 
 def grid_add_new_tile(grid):
+    """Ajoute une valeur dans une case vide de la grille et renvoie cette dernière."""
     a,b = get_new_position(grid)
     x = get_value_new_tile()
     grid[a][b] = x
@@ -60,6 +67,7 @@ def grid_add_new_tile(grid):
 
 
 def init_game(n):
+    """Initialise le jeu en créant une grille avec deux valeurs aléatoires."""
     grid = create_grid(n)
     grid = grid_add_new_tile(grid)
     grid = grid_add_new_tile(grid)
@@ -68,6 +76,7 @@ def init_game(n):
 
 
 def grid_to_string_with_size(grid, n):
+    """Transforme la matrice de la grille en une chaîne de caractères."""
     taille_max = len(str(max([max(l) for l in grid])))
 
     affichage = (' ' + '='*taille_max)*n + '\n'
@@ -83,6 +92,7 @@ def grid_to_string_with_size(grid, n):
 
 
 def long_value(grid):
+    """Retourne la longueur de la plus longue valeur contenue dans une des cases de la grille."""
     return len(str(max([max(l) for l in grid])))
 
 
@@ -90,6 +100,7 @@ grid = [[256,0,2048],[0,2,4],[0,0,0]]
 
 
 def long_value_with_theme(grid, theme):
+    """Retourne la longueur de la plus longue valeur contenue dans une des cases de la grille en tenant compte du thème choisi."""
     max = 0
     n = len(grid)
 
@@ -102,6 +113,7 @@ def long_value_with_theme(grid, theme):
 
 
 def grid_to_string_with_size_and_theme(grid,theme,taille_max):
+    """Transforme la matrice de la grille en une chaîne de caractères en tenant compte du thème choisi."""
     n = len(grid)
     affichage = (' ' + '='*taille_max)*n + '\n'
 
@@ -115,6 +127,7 @@ def grid_to_string_with_size_and_theme(grid,theme,taille_max):
     return affichage
 
 def move_row_left(row):
+    """Effectue un déplacement vers la gauche sur une ligne."""
     n = len(row)
     liste = []
     for k in range(1,n):
@@ -134,6 +147,7 @@ def move_row_left(row):
 row = [2, 2, 2, 2]
 
 def rev(liste):
+    """Inverse la liste."""
     n = len(liste)
     a = [0]*n
 
@@ -144,9 +158,11 @@ def rev(liste):
 
 
 def move_row_right(row):
+    """Effectue un déplacement vers la droite sur une ligne."""
     return rev(move_row_left(rev(row)))
 
 def transpose(grid):
+    """Transpose la matrice donnée en entrée."""
     n = len(grid)
     a = grid
     for i in range(n):
@@ -155,6 +171,7 @@ def transpose(grid):
     return a
 
 def pivote(grid):
+    """Effectue une rotation de 90° vers la gauche sur la matrice."""
     n = len(grid)
     a = [[0]*n for i in range(n)]
 
@@ -166,6 +183,7 @@ def pivote(grid):
 
 
 def move_grid(grid, d):
+    """Effectue le déplacement voulu sur la grille."""
     b = grid
     if d == 'g':
         b = [move_row_left(row) for row in grid]
@@ -184,6 +202,7 @@ a = [[0,0,0],[0,0,0],[0,0,1]]
 
 
 def is_full(grid):
+    """Retourne True si la grille est pleine, False sinon."""
     n = len(grid)
 
     for i in range(n):
@@ -195,6 +214,7 @@ def is_full(grid):
 
 
 def move_possible(grid):
+    """Retourne une liste disant respectivement si un déplacement vers la gauche, la droite, le haut, le bas est possible."""
     liste_mouvements = ['g','d','h','b']
     for i in range(4):
         liste_mouvements[i] = not (grid == move_grid(grid, liste_mouvements[i]))
@@ -202,11 +222,13 @@ def move_possible(grid):
 
 
 def is_game_over(grid):
+    """Retourne True si la partie est terminée (aucun mouvement possible), False sinon."""
     liste_mouvements = move_possible(grid)
     return not (True in liste_mouvements)
 
 
 def get_grid_tile_max(grid):
+    """Retourne la plus grande valeur contenue dans la grille."""
     max = 0
     n = len(grid)
     for i in range(n):
@@ -217,10 +239,12 @@ def get_grid_tile_max(grid):
 
 
 def is_won(grid):
+    """Retourne True si la partie est gagnée (une case au moins contient une valeur au moins égale à 2048), False sinon."""
     return get_grid_tile_max(grid) >= 2048
 
 
 def random_play(theme):
+    """Lance une partie en effectuant des coups aléatoires."""
     grid = init_game(4)
     move = ['g','d','h','b']
     while not is_game_over(grid):
@@ -244,6 +268,7 @@ def random_play(theme):
 
 
 def game_play():
+    """Lance une partie et permet à l'utilisateur de jouer."""
     size = int(read_size_grid())
     theme = read_theme_grid()
     grid = init_game(size)
